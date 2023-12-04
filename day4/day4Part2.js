@@ -1,28 +1,36 @@
 import { input, example, exampleCustom } from './input.js';
-const total = [];
+const refine = [];
 
 function solveDay4() {
-    const inputData = example;
-
-    inputData.forEach((card, indexCard) => {
-        let winningNumbers = card.split(' | ')[0];
-        let myNumbers = card.split(' | ')[1];
+    const inputData = input;
+    inputData.forEach((val) => {
+        refine.push({card: val, copies: 1});
+    })
+    refine.forEach((card, indexCard) => {
+        let winningNumbers = card.card.split(' | ')[0];
+        let myNumbers = card.card.split(' | ')[1];
         const cardId = winningNumbers.split(': ')[0];
         winningNumbers = winningNumbers.split(': ')[1].split(' ');
         myNumbers = myNumbers.split(' ');
         const matchingNumbers = myNumbers.filter((num) => winningNumbers.includes(num) && num !== '');
-        matchingNumbers.forEach((element, indexW) => {
-            inputData.splice(indexCard + indexW + 1);
-        });
-        console.log(inputData);
-        total.push(value);
+        let iterations = 0;
+        while (iterations !== card.copies) {
+            makeCopies(matchingNumbers, indexCard);
+            iterations++;
+        }
     });
 
-    const sum = total.reduce((previousValue, currentValue) => {
-        return parseInt(previousValue) + parseInt(currentValue);
+    const sum = refine.reduce((previousValue, currentValue) => {
+        return parseInt(previousValue) + parseInt(currentValue.copies);
     }, 0);
     console.log(sum);
 }
+
+function makeCopies(matchNumbers, indexCard) {
+    matchNumbers.forEach((element, indexW) => {
+        refine[indexCard + (indexW + 1)].copies = refine[indexCard + (indexW + 1)].copies + 1;
+    });
+} 
 solveDay4();
 
-// 24160 - OK 
+// 5659035 - OK 
