@@ -53,7 +53,6 @@ function mapCoordinates(ogToDest) {
 
 
 function getAllSeeds(seeds) {
-    const length = seeds.length;
     for (let index = 0; index < seeds.length; index++) {
         const seed = parseInt(seeds[index]);
         if (index === 0 || index%2 === 0) {
