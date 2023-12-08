@@ -1,81 +1,82 @@
 import { movements, movementsExample2, input, inputExample2 } from './input.js';
+
 let dataProcessed = [];
-let currentPosition = 'AAA';
-let found = false;
-let maxLoop = 999999999;
-let steps = 0;
 const currentMovements = movements.split('');
 const data = input;
 
+const allLoops = [];
+
+function gcd2(a, b) {
+    // Greatest common divisor of 2 integers
+    if (!b) return b === 0 ? a : NaN;
+    return gcd2(b, a % b);
+}
+function gcd(array) {
+    // Greatest common divisor of a list of integers
+    var n = 0;
+    for (var i = 0; i < array.length; ++i)
+        n = gcd2(array[i], n);
+    return n;
+}
+function lcm2(a, b) {
+    // Least common multiple of 2 integers
+    return a * b / gcd2(a, b);
+}
+function lcm(array) {
+    // Least common multiple of a list of integers
+    var n = 1;
+    for (var i = 0; i < array.length; ++i)
+        n = lcm2(array[i], n);
+    return n;
+}
+
 function solveDay8() {
     processData();
-    const startingPoints = dataProcessed.filter((d) => d.position.substring(2, 3) === 'A');
-    let endings = startingPoints.filter((d) => d.currentPosition.substring(2, 3) === 'Z');
-    while (endings.length !== startingPoints.length) {
-
-        endings = startingPoints.filter((d) => d.currentPosition.substring(2, 3) === 'Z');
-        // console.log(startingPoints);
-        currentMovements.forEach(movement => {
-            startingPoints.forEach(startingPoint => {
-                // if (startingPoint.currentPosition.substring(2, 3) !== 'Z') {
-                    const currentPositionData = dataProcessed.find((d) => d.position === startingPoint.currentPosition);
+    const startingPoints = dataProcessed.filter((d) => d.position[2] === 'A');
+    let endings = startingPoints.filter((d) => d.currentPosition[2] === 'Z');
+    startingPoints.forEach((startingPoint, index) => {
+        let steps = 0;
+        while (steps < 99999) {
+            for (const movement of currentMovements) {
+                if (startingPoint.currentPosition[2] !== 'Z') {
+                    const currentPositionData = positionData[startingPoint.currentPosition];
                     startingPoint.currentPosition = currentPositionData[movement];
-                // } else {
-                    // console.log(startingPoint.currentPosition, movement);
-                // }
-            })
-            if (endings.length !== startingPoints.length) {
-                steps++;
-                if (steps % 100000 === 0) {
-                    console.log(`Steps: ${steps}`);
+                    steps++;
+                    if (startingPoint.currentPosition[2] === 'Z') {
+                        // console.log('end with Z', startingPoint.currentPosition, steps);
+                        startingPoint.loops = steps;
+                    }
+                } else {
+                    steps = 99999;
                 }
             }
-        })
-    }
-    // for (let index = 0; index < maxLoop; index++) {
-    //     currentMovements.forEach(movement => {
-    //         endings = startingPoints.filter((d) => d.currentPosition.substring(2, 3) === 'Z');
-    //         if (endings.length === startingPoints.length) {
-    //             index = maxLoop;
-    //             return;
-    //         }
-    //         startingPoints.forEach(startingPoint => {
-    //             const currentPositionData = dataProcessed.find((d) => d.position === startingPoint.currentPosition);
-    //             startingPoint.currentPosition = currentPositionData[movement];
-    //         })
-    //         steps++;
-    //     })
-    // }
-    console.log('steps', steps);
+        }
+    });
+    startingPoints.forEach((startPoint) => {
+        allLoops.push(startPoint.loops);
+    });
+
+    console.log(allLoops);
+
+    console.log(lcm(allLoops));
 }
+
+const positionData = {};
 
 function processData() {
     data.forEach(element => {
         const splittedEqual = element.split(' = ');
         const position = splittedEqual[0];
         const movements = splittedEqual[1];
-        dataProcessed.push({
+        positionData[position] = {
             position,
             L: movements.split(', ')[0].substring(1),
-            R: movements.split(', ')[1].substring(0,( movements.split(', ')[1].length-1)),
-            currentPosition: position
-        });
+            R: movements.split(', ')[1].substring(0, movements.split(', ')[1].length - 1),
+            currentPosition: position,
+            loops: []
+        };
     });
-}
-
-function checkEndingString(str, end) {
-    return str.substring(2, 3) !== end;
-}
-
-function move() {
-    currentMovements.forEach(movement => {
-        console.log('currentPosition', currentPosition);
-        if (currentPosition.substring(2, 3) !== 'Z') {
-            const currentPositionData = dataProcessed.find((d) => d.position === currentPosition);
-            currentPosition = currentPositionData[movement];
-            steps++;
-        }
-    });
+    dataProcessed = Object.values(positionData);
 }
 
 solveDay8();
