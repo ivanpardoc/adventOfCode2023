@@ -1,4 +1,4 @@
-const input =[
+const input = [
     "F|J-F|.|.F-F-7-7F--|77F.7.77F|-L7-|7|-|-F-L7.7FJF-7-JF7.77-F.7F7.FLF7-FF-L7F--F-J-..J-FJ-FLF7.FF.-F7-|-.F7--77F---7-LF7FFL7.F7|7FJ-FL-.-FJ-F",
     "-L7-FL7--77J|.7.LJFJFLL.F-F-7JLL7-|-|F|L-.L||||7LJ.LF||LJL|L7FF.F|L||.|7-LFFJ.F7L7FJ|.7.F7.||J-F--|J7LLJJL-|-LL.L-7LLJ7-JFLF---FJ|FJ.L77L|J|",
     "LLF-7LJ77|.77FJ-JLL-|-LLJF.JJJ.F7L|7L7.FJ.F-7J|77F|--J7JFFJFLLL|7JF7F--J.||L7.L7FJ-7|-F.L-FJ|LLL-FF77FJL-.-JLLL7.F|.-L-7L7|J7|L|7.J-L-JJ.-FJ",
@@ -156,4 +156,42 @@ const inputExampleComplex = [
     "LJ..."
 ];
 
-export { input, inputExample, inputExampleComplex }
+const examplePart4 = [
+    "...........",
+    ".S-------7.",
+    ".|F-----7|.",
+    ".||OOOOO||.",
+    ".||OOOOO||.",
+    ".|L-7TF-J|.",
+    ".|II|O|II|.",
+    ".L--JOL--J.",
+    ".....O....."
+];
+
+const examplePart28 = [
+    "OF----7F7F7F7F-7OOOO",
+    "O|F--7||||||||FJOOOO",
+    "O||OFJ||||||||L7OOOO",
+    "FJL7L7LJLJ||LJIL-7OO",
+    "L--JOL7IIILJS7F-7L7O",
+    "OOOOF-JIIF7FJ|L7L7L7",
+    "OOOOL7IF7||L7|IL7L7|",
+    "OOOOO|FJLJ|FJ|F7|OLJ",
+    "OOOOFJL-7O||O||||OOO",
+    "OOOOL---JOLJOLJLJOOO"
+];
+
+const examplePart210 = [
+    "FF7FSF7F7F7F7F7F---7",
+    "L|LJ||||||||||||F--J",
+    "FL-7LJLJ||||||LJL-77",
+    "F--JF--7||LJLJIF7FJ-",
+    "L---JF-JLJIIIIFJLJJ7",
+    "|F|F-JF---7IIIL7L|7|",
+    "|FFJF7L7F-JF7IIL---7",
+    "7-L-JL7||F7|L7F-7F7|",
+    "L.L7LFJ|||||FJL7||LJ",
+    "L7JLJL-JLJLJL--JLJ.L"
+];
+
+export { input, inputExample, inputExampleComplex, examplePart4, examplePart28, examplePart210 }
