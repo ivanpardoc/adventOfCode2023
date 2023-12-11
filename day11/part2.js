@@ -5,6 +5,7 @@ let refinedData = [];
 let extraValueCol = [];
 let galaxies = [];
 let pairsOfGalaxies = [];
+const gap = 1000000;
 
 function resolve() {
     const universe = input;
@@ -14,17 +15,35 @@ function resolve() {
     getPairs();
     const steps = getSteps();
     console.log('total steps', steps);
-    // 10231178
+
+    // 82000210 -- low it was the fucking example
+    // 622120986954 
 }
 
 function getSteps() {
-    let sum = 0;
+    let sumTotal = 0;
     pairsOfGalaxies.forEach((pair) => {
-        const rowDif = pair.to.row - pair.from.row;
-        const colDif = Math.abs(pair.to.col - pair.from.col);
-        sum += rowDif+colDif;
+        let sum = 0;
+        if (pair.to.row > pair.from.row) {
+            for (let index = pair.from.row; index < pair.to.row; index++) {
+                const element = refinedData[index][pair.to.col];
+                sum += element.stepVal;
+            }
+        }
+        if (pair.to.col > pair.from.col) {
+            for (let index = pair.from.col; index < pair.to.col; index++) {
+                const element = refinedData[pair.to.row][index];
+                sum += element.stepVal;
+            }
+        } else {
+            for (let index = pair.to.col; index < pair.from.col; index++) {
+                const element = refinedData[pair.to.row][index];
+                sum += element.stepVal;
+            }
+        }
+        sumTotal +=sum;
     });
-    return sum;
+    return sumTotal;
 }
 
 
@@ -44,8 +63,8 @@ function getPairs() {
 function getGalaxies() {
     refinedData.forEach((row, indexRow) => {
         row.forEach((col, indexCol) => {
-            if (col === '#') {
-                refinedData[indexRow][indexCol] = galaxies.length;
+            if (col.val === '#') {
+                refinedData[indexRow][indexCol].val = galaxies.length;
                 galaxies.push({row: indexRow, col: indexCol, number: galaxies.length})
             }
         })
@@ -54,22 +73,27 @@ function getGalaxies() {
 
 function addExtraRows(universe) {
     universe.forEach(element => {
-        console.log('element', element);
+        let newRow = []
         if (element.includes('#')) {
-            universeWithExtraRows.push(element);
+            element.split('').forEach(char => {
+                newRow.push({val: char, stepVal: 1})
+            });
         } else {
-            universeWithExtraRows.push(element);
-            universeWithExtraRows.push(element);
+            element.split('').forEach(char => {
+                newRow.push({val: char, stepVal: gap})
+            });
         }
+        universeWithExtraRows.push(newRow);
+
     });
 }
 
 function addExtraCols(universe) {
-    for (let index = 0; index < universe[0].split('').length; index++) {
+    for (let index = 0; index < universe[0].length; index++) {
         let universeFlag = false;
         for (let indexRow = 0; indexRow < universe.length; indexRow++) {
             const element = universe[indexRow][index];
-            if (element === '#') {
+            if (element.val === '#') {
                 universeFlag = true;
             }
         }
@@ -80,14 +104,14 @@ function addExtraCols(universe) {
 
     let newUniverse = []
     universe.forEach((row) => {
-        let newRow = '';
-        row.split('').forEach((char, charInd) => {
-            newRow += char;
+        let newRow = [];
+        row.forEach((char, charInd) => {
             if (extraValueCol.includes(charInd)) {
-                newRow += '.';
+                char.stepVal = char.stepVal === 1 ? gap : gap*2;
             }
+            newRow.push(char);
         })
-        newUniverse.push(newRow.split(''));
+        newUniverse.push(newRow);
     });
 
     return newUniverse;
