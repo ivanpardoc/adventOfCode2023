@@ -53,6 +53,7 @@ function solve() {
     const sum = results.reduce((previousValue, currentValue) => {
         return parseInt(previousValue) + parseInt(currentValue);
     }, 0);
+    console.log(results);
     console.log('total', sum);
 
     // 30486 -too low
