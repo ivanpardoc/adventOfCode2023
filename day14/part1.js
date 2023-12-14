@@ -3,6 +3,7 @@ const data = input;
 let refinedData = [];
 
 function solve() {
+    console.time();
     data.forEach((row) => {
         refinedData.push(row.split(''));
     })
@@ -16,9 +17,7 @@ function tiltRocks() {
         for (let indexRow = refinedData.length-1; indexRow >= 0; indexRow--) {
             const row = refinedData[indexRow];
             const char = row[indexCol];
-            console.log('row', indexRow, indexCol);
-            console.log('char', char);
-            
+
             if (char === 'O') {
                 rocks.push({indexCol, indexRow});
                 refinedData[indexRow][indexCol] = '.';
@@ -28,26 +27,20 @@ function tiltRocks() {
                 if (rocks.length !== 0) {
                     for (let index = indexRow + rocks.length; index > indexRow; index--) {
                         refinedData[index][indexCol] = 'O';
-                        console.log('indexrow', indexRow, 'index', index);
                     }
                 }
                 rocks = [];
             }
             if (indexRow === 0) {
-                console.log('endOfColumn');
                 if (rocks.length !== 0) {
                     for (let index = rocks.length - 1; index >= 0; index--) {
                         refinedData[index][indexCol] = 'O';
-                        console.log('indexrow', indexRow, 'index', index);
                     }
                 }
                 rocks = [];
             }
         }
         }
-    refinedData.forEach((row, index) => {
-        console.log(index, refinedData.length - index, row.join(''));
-    })
 
     let totalCount = 0
     refinedData.forEach((row, index) => {
@@ -56,6 +49,7 @@ function tiltRocks() {
         totalCount += count.length * value;
     })
     console.log(totalCount);
+    console.timeEnd();
 }
 
 solve();
