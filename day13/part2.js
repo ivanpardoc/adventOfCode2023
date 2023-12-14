@@ -1,5 +1,5 @@
 import { input, example, example2, resultsPart1 } from "./input.js";
-
+//38964
 let dataRefined = [];
 let dataVertical = [];
 let results = []
@@ -15,8 +15,7 @@ function foundMatches(pattern, indexPattern, direction, secondTime) {
         const diff = getDifference(row, nextRow);
         // if (diff.result.length === 1) {
         const rowsModified = dataRefined[indexPattern].rowsModified;
-        console.log('here', secondTime);
-        if (!secondTime) {
+        // if (!secondTime) {
             if (diff.result.length === 1 && (!dataRefined[indexPattern].modified || !dataRefined[indexPattern].modified)) {
                 // console.log('row, pattern[indexRow + 1]', row, pattern[indexRow + 1]);
                 // console.log(diff.result.length, diff, ' row[diff.indexNotEqual]',  pattern[indexRow + 1]);
@@ -24,27 +23,38 @@ function foundMatches(pattern, indexPattern, direction, secondTime) {
                 if (direction === 'horizontal') {
                     dataRefined[indexPattern].pattern[indexRow+1] = newPattern;
                     dataRefined[indexPattern].modified = true;
-                    dataRefined[indexPattern].rowsModified = [indexRow, indexRow+1]
+                    dataRefined[indexPattern].rowsModified = [indexRow, indexRow+1];
+                    let loopCheckSymmetry = loopCommon([[indexRow, indexRow + 1]], pattern, direction, indexPattern);
+                    if (!loopCheckSymmetry.reachedEnd) {
+                        dataRefined[indexPattern].pattern[indexRow+1] = nextRow;
+                        dataRefined[indexPattern].modified = false;
+                        dataRefined[indexPattern].rowsModified = [];
+                    }
                     refineVerticalAgain(dataRefined[indexPattern].pattern, indexPattern);
                 } else {
                     dataVertical[indexPattern].pattern[indexRow+1] = newPattern;
                     dataVertical[indexPattern].modified = true;
+                    let loopCheckSymmetry = loopCommon([[indexRow, indexRow + 1]], dataVertical[indexPattern].pattern, direction, indexPattern);
+                    if (!loopCheckSymmetry.reachedEnd) {
+                        dataVertical[indexPattern].pattern[indexRow+1] = nextRow;
+                        dataVertical[indexPattern].modified = true;
+                    }
                 }
             }
-        } else if (secondTime) {
-            if (diff.result.length === 1 && rowsModified[0] !== indexRow) {
-                let newPattern = nextRow.slice(0, diff.indexNotEqual) + (diff.result === '#' ? '.' : '#') + nextRow.substring(diff.indexNotEqual+1);
-                if (direction === 'horizontal') {
-                    dataRefined[indexPattern].pattern[indexRow+1] = newPattern;
-                    dataRefined[indexPattern].modified = true;
-                    dataRefined[indexPattern].rowsModified = [indexRow, indexRow+1]
-                    refineVerticalAgain(dataRefined[indexPattern].pattern, indexPattern);
-                } else {
-                    dataVertical[indexPattern].pattern[indexRow+1] = newPattern;
-                    dataVertical[indexPattern].modified = true;
-                }
-            }
-        }
+        // } else if (secondTime) {
+        //     if (diff.result.length === 1 && rowsModified[0] !== indexRow) {
+        //         let newPattern = nextRow.slice(0, diff.indexNotEqual) + (diff.result === '#' ? '.' : '#') + nextRow.substring(diff.indexNotEqual+1);
+        //         if (direction === 'horizontal') {
+        //             dataRefined[indexPattern].pattern[indexRow+1] = newPattern;
+        //             dataRefined[indexPattern].modified = true;
+        //             dataRefined[indexPattern].rowsModified = [indexRow, indexRow+1]
+        //             refineVerticalAgain(dataRefined[indexPattern].pattern, indexPattern);
+        //         } else {
+        //             dataVertical[indexPattern].pattern[indexRow+1] = newPattern;
+        //             dataVertical[indexPattern].modified = true;
+        //         }
+        //     }
+        // }
         if (row === pattern[indexRow + 1]) {
             matches.push([indexRow, indexRow+1])
         }
@@ -164,19 +174,19 @@ function solve() {
         if (!dataRefined[indexPattern].modified && !dataVertical[indexPattern].modified) {
             // console.log('NOT MODIFIED', indexPattern);
         }
-        if (!flagPushed) {
-            dataRefined[indexPattern].pattern = part1dataRefined[indexPattern];
-            dataRefined[indexPattern].modified = false;
-            console.log(dataRefined[indexPattern]);
-            let newMatches = foundMatches(dataRefined[indexPattern].pattern, indexPattern, 'horizontal', true);
-            const resultHorizontalN = loopCommon(newMatches, dataRefined[indexPattern].pattern, 'horizontal', indexPattern);
-            results.push(resultHorizontalN.simmetryFound[0][1] * 100);
+        // if (!flagPushed) {
+        //     dataRefined[indexPattern].pattern = part1dataRefined[indexPattern];
+        //     dataRefined[indexPattern].modified = false;
+        //     console.log(dataRefined[indexPattern]);
+        //     let newMatches = foundMatches(dataRefined[indexPattern].pattern, indexPattern, 'horizontal', true);
+        //     const resultHorizontalN = loopCommon(newMatches, dataRefined[indexPattern].pattern, 'horizontal', indexPattern);
+        //     results.push(resultHorizontalN.simmetryFound[0][1] * 100);
 
-            console.log('newMatches', resultHorizontalN);
-            // console.log('NOT PUSHED', indexPattern);
-            // console.log(dataRefined[indexPattern]);
-            // console.log(part1dataRefined[indexPattern]);
-        }
+        //     console.log('newMatches', resultHorizontalN);
+        //     // console.log('NOT PUSHED', indexPattern);
+        //     // console.log(dataRefined[indexPattern]);
+        //     // console.log(part1dataRefined[indexPattern]);
+        // }
         console.log('resultsHor', resultsHor);
         console.log('resultsVer', resultsVer);
         

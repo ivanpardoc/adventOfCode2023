@@ -77,9 +77,11 @@ function south(datat) {
 }
 
 function east(datat) {
-    datat.forEach((row, indexRow) => {
+    for (let indexRow = 0; indexRow < datat.length; indexRow++) {
+        const row = datat[indexRow];
         let rocks = [];
-        row.forEach((char, indexCol) => {
+        for (let indexCol = 0; indexCol < row.length; indexCol++) {
+            const char = row[indexCol];
             if (char === 'O') {
                 rocks.push({indexCol, indexRow});
                 datat[indexRow][indexCol] = '.';
@@ -101,8 +103,8 @@ function east(datat) {
                 }
                 rocks = [];
             }
-        })
-    })
+        }
+    }
 }
 
 function west(datat) {
@@ -154,8 +156,8 @@ function tiltRocks() {
             totalCount += count.length * value;
         })
         let sameR = results.filter((r) => r.totalCount === totalCount);
-        if (sameR.length > 4) {
-            diff = sameR[3].index - sameR[2].index;
+        if (sameR.length > 2) {
+            diff = sameR[2].index - sameR[1].index;
             startLoop = sameR[1].index;
             results.push(totalCount);
             loopResults = results.slice( sameR[1].index,sameR[1].index +diff);
@@ -171,5 +173,6 @@ function getFinalValue(diff, startLoop, loopResults) {
     
     console.log(loopResults[loopsDividedByDiff]);
     console.timeEnd();
+    //97241
 }
 solve();
