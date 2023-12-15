@@ -1,28 +1,23 @@
 import { input, example } from "./input.js";
 
 const data = input;
-let refinedData = [];
-let results = [];
-function solve() {
-    refinedData = data.split(',');
-    refinedData.forEach((field) => {
-        let value = 0
-        field.split('').forEach((char) => {
-            value = getValue(char, value);
-        });
-        results.push(value);
-    });
-    const sum = results.reduce((previousValue, currentValue) => {
-        return parseInt(previousValue) + parseInt(currentValue);
-    }, 0);
-    console.log('total', sum);
-}
+let results = 0;
 
-function getValue(char, currentValue) {
-    currentValue += char.charCodeAt(0);
-    currentValue = currentValue * 17;
-    currentValue = currentValue%256;
-    return currentValue;
-};
+function solve() {
+    console.time();
+
+    data.split(',').forEach((field) => {
+        let value = 0;
+
+        field.split('').forEach((char) => {
+            value = ((value + char.charCodeAt(0)) * 17)%256;
+        });
+
+        results += value;
+    });
+
+    console.timeEnd();
+    console.log('total', results);
+}
 
 solve()
