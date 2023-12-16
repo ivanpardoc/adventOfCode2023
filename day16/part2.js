@@ -1,36 +1,53 @@
 import { input, example } from "./input.js";
-const startingBeam = { XPoint: 0, YPoint: 0, direction: 'east', reachedEnd: false };
+// const startingBeam = { XPoint: 0, YPoint: 0, direction: 'east', reachedEnd: false };
 let beams = [];
 const data = input;
 let grid = [];
 let gridToCheck = [];
-const startedBeams = [];
+let startedBeams = [];
+let startingBeams = [];
+let resultsEnergy = [];
 
 function resolve() {
     console.time();
     grid = data.split(', ');
-    grid.forEach((row) => {
-        gridToCheck.push(row.split(''));
-    })
-    startingBeam.reachedEnd = moveBeam(startingBeam);
-    let maxLoops = 15;
-    let currentLoop = 0;
-    while (currentLoop < maxLoops) { // https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd21vZWYyb3JqMHg4bjN2Z3dmb20zOWdiYzNhMnhqcTd6NTU5dDhhNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SwyTq2jJxc9im6BYnN/giphy.gif
-        startedBeams.forEach((beam, indexB) => {
-            beam.reachedEnd = moveBeam(beam);
-        });
-        currentLoop++;
+    resetGridToCheck();
+    let columnsLength = grid[0].length - 1;
+    let rowsLength = grid.length - 1;
+    for (let indexC = 0; indexC < columnsLength; indexC++) {
+        startingBeams.push({ XPoint: indexC, YPoint: 0, direction: 'south', reachedEnd: false });
+        startingBeams.push({ XPoint: indexC, YPoint: rowsLength, direction: 'north', reachedEnd: false });
     }
-    let countEnergy = 0;
-    gridToCheck.forEach((row) => {
-        row.forEach((ch) => {
-            if (ch === '#') {
-                countEnergy++;
-            }
+
+    for (let indexY = 0; indexY < rowsLength; indexY++) {
+        startingBeams.push({ XPoint: 0, YPoint: indexY, direction: 'east', reachedEnd: false });
+        startingBeams.push({ XPoint: columnsLength, YPoint: indexY, direction: 'west', reachedEnd: false });
+    }
+
+    startingBeams.forEach((startingBeam, indexStart) => {
+        resetGridToCheck();
+        startedBeams = [];
+        startingBeam.reachedEnd = moveBeam(startingBeam);
+        let maxLoops = 15; 
+        let currentLoop = 0;
+        while (currentLoop < maxLoops) { // https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd21vZWYyb3JqMHg4bjN2Z3dmb20zOWdiYzNhMnhqcTd6NTU5dDhhNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SwyTq2jJxc9im6BYnN/giphy.gif
+            startedBeams.forEach((beam, indexB) => {
+                beam.reachedEnd = moveBeam(beam);
+            });
+            currentLoop++;
+        }
+        let countEnergy = 0;
+        gridToCheck.forEach((row) => {
+            row.forEach((ch) => {
+                if (ch === '#') {
+                    countEnergy++;
+                }
+            })
         })
-    })
+        resultsEnergy.push(countEnergy);
+    });
     console.timeEnd();
-    console.log(countEnergy);
+    console.log('max', Math.max(...resultsEnergy));
 }
 
 function printModified() {
@@ -41,6 +58,13 @@ function printModified() {
     })
     console.log('   0123456789    0123456789');
     console.log('');
+}
+
+function resetGridToCheck() {
+    gridToCheck = [];
+    grid.forEach((row, index) => {
+        gridToCheck.push(row.split(''));
+    })
 }
 
 function moveBeam(beam) {
