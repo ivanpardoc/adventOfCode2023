@@ -5,6 +5,7 @@ const data = input;
 let grid = [];
 let gridToCheck = [];
 const startedBeams = [];
+let coordsArr = [];
 
 function resolve() {
     console.time();
@@ -125,9 +126,11 @@ function checkMove(charAtGrid, beam) {
             return beam;
         } else if (beam.direction === 'east' || beam.direction === 'west') {
             let newBeam = { XPoint: beam.XPoint, YPoint: beam.YPoint - 1, direction: 'north', reachedEnd: false };
-            let alreadyChecked = startedBeams.some((b) => b.XPoint === newBeam.XPoint && b.YPoint === newBeam.YPoint && b.direction === newBeam.direction);
+            let coordToF = (newBeam.XPoint*1000).toString() + ((newBeam.YPoint) * 1000).toString() + 'north';
+            let alreadyChecked = coordsArr.some((b) => b === coordToF);
             if (!alreadyChecked) {
                 startedBeams.push(newBeam);
+                coordsArr.push(coordToF)
             }
             beam.YPoint++; // continue current beam to south
             beam.direction = 'south';
@@ -144,9 +147,11 @@ function checkMove(charAtGrid, beam) {
             return beam;
         } else if (beam.direction === 'north' || beam.direction === 'south') {
             let newBeam = { XPoint: beam.XPoint + 1, YPoint: beam.YPoint, direction: 'east', reachedEnd: false };
-            let alreadyChecked = startedBeams.some((b) => b.XPoint === newBeam.XPoint && b.YPoint === newBeam.YPoint && b.direction === newBeam.direction);
+            let coordToF = (newBeam.XPoint*1000).toString() + ((newBeam.YPoint) * 1000).toString() + 'north';
+            let alreadyChecked = coordsArr.some((b) => b === coordToF);
             if (!alreadyChecked) {
                 startedBeams.push(newBeam);
+                coordsArr.push(coordToF)
             }
             beam.XPoint--; // CONTINUE west
             beam.direction = 'west';

@@ -7,6 +7,7 @@ let gridToCheck = [];
 let startedBeams = [];
 let startingBeams = [];
 let resultsEnergy = [];
+let coordsArr = [];
 
 function resolve() {
     console.time();
@@ -27,11 +28,12 @@ function resolve() {
     startingBeams.forEach((startingBeam, indexStart) => {
         resetGridToCheck();
         startedBeams = [];
+        coordsArr = [];
         startingBeam.reachedEnd = moveBeam(startingBeam);
-        let maxLoops = 15; 
+        let maxLoops = 20; 
         let currentLoop = 0;
         while (currentLoop < maxLoops) { // https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd21vZWYyb3JqMHg4bjN2Z3dmb20zOWdiYzNhMnhqcTd6NTU5dDhhNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SwyTq2jJxc9im6BYnN/giphy.gif
-            startedBeams.forEach((beam, indexB) => {
+            startedBeams.forEach((beam) => {
                 beam.reachedEnd = moveBeam(beam);
             });
             currentLoop++;
@@ -149,9 +151,11 @@ function checkMove(charAtGrid, beam) {
             return beam;
         } else if (beam.direction === 'east' || beam.direction === 'west') {
             let newBeam = { XPoint: beam.XPoint, YPoint: beam.YPoint - 1, direction: 'north', reachedEnd: false };
-            let alreadyChecked = startedBeams.some((b) => b.XPoint === newBeam.XPoint && b.YPoint === newBeam.YPoint && b.direction === newBeam.direction);
+            let coordToF = (newBeam.XPoint*1000).toString() + ((newBeam.YPoint) * 1000).toString() + newBeam.direction;
+            let alreadyChecked = coordsArr.some((b) => b === coordToF);
             if (!alreadyChecked) {
                 startedBeams.push(newBeam);
+                coordsArr.push(coordToF)
             }
             beam.YPoint++; // continue current beam to south
             beam.direction = 'south';
@@ -168,9 +172,11 @@ function checkMove(charAtGrid, beam) {
             return beam;
         } else if (beam.direction === 'north' || beam.direction === 'south') {
             let newBeam = { XPoint: beam.XPoint + 1, YPoint: beam.YPoint, direction: 'east', reachedEnd: false };
-            let alreadyChecked = startedBeams.some((b) => b.XPoint === newBeam.XPoint && b.YPoint === newBeam.YPoint && b.direction === newBeam.direction);
+            let coordToF = (newBeam.XPoint*1000).toString() + ((newBeam.YPoint) * 1000).toString() + newBeam.direction;
+            let alreadyChecked = coordsArr.some((b) => b === coordToF);
             if (!alreadyChecked) {
                 startedBeams.push(newBeam);
+                coordsArr.push(coordToF)
             }
             beam.XPoint--; // CONTINUE west
             beam.direction = 'west';
