@@ -1,36 +1,38 @@
 import { input, example, example2 } from "./input.js";
 
-let grid = [];
 // let gridRow = ['.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.'];
-let currentPoint = { y: 200, x: 200 };
+let currentPoint = { y: 0, x: 0 };
 let points = [];
 const data = input;
-
+const hexToDecimal = hex => parseInt(hex, 16);
+//119762850
 function solve() {
     console.time();
     let stepsCount = 0;
     data.forEach((row) => {
         let splitted = row.split(' ');
-        let direction = splitted[0];
-        let steps = parseInt(splitted[1]);
-        if (direction === 'D') {
+        let cleaned = splitted[2].replace('(#', '').replace(')', '');
+        let steps = hexToDecimal(cleaned.substring(0, 5));
+        let directionDigit = parseInt(cleaned[5]);
+
+        if (directionDigit === 1) {
+            stepsCount += steps
             points.push(currentPoint.y + steps, currentPoint.x)
-            stepsCount++
             currentPoint = { y: currentPoint.y + steps, x: currentPoint.x };
         }
-        if (direction === 'U') {
+        if (directionDigit === 3) {
+            stepsCount += steps
             points.push(currentPoint.y - steps, currentPoint.x)
-            stepsCount++
             currentPoint = { y: currentPoint.y - steps, x: currentPoint.x };
         }
-        if (direction === 'R') {
+        if (directionDigit === 0) {
+            stepsCount += steps
             points.push(currentPoint.y, currentPoint.x + steps)
-            stepsCount++
             currentPoint = { y: currentPoint.y, x: currentPoint.x + steps };
         }
-        if (direction === 'L') {
+        if (directionDigit === 2) {
+            stepsCount += steps
             points.push(currentPoint.y, currentPoint.x - steps)
-            stepsCount++
             currentPoint = { y: currentPoint.y, x: currentPoint.x - steps };
         }
     })
