@@ -34,9 +34,8 @@ function solve() {
     const arrWF = Object.entries(refinedWF)
     const maxLength = 4000;
     for (let indexX = 1; indexX <= maxLength; indexX++) {
-        if (indexX % 2 === 0) {
+        if (indexX % 5 === 0) {
             console.log('indexX', indexX);
-            console.timeEnd();
         }
         for (let indexM = 1; indexM <= maxLength; indexM++) {
         
@@ -66,7 +65,6 @@ function solve() {
     //     }
     // })
     console.log(acceptedComb);
-    console.timeEnd();
     //397134
 }
 
